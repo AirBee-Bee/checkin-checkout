@@ -4,10 +4,9 @@
 
 ## Related Projects
 
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
+  - https://github.com/AirBee-Bee/Reviews
+  - https://github.com/AirBee-Bee/description-amenities
+  - https://github.com/AirBee-Bee/photo-carousel
 
 ## Table of Contents
 
