@@ -2,16 +2,24 @@
   "name": "",
   "version": "",
   "description": "",
-  "author": "",
+  "author": "Blake Jones",
   "license": "",
   "engines": {
     "node": ">=6.13.0"
   },
   "scripts": {
+    "build": "webpack --config webpack.config.js --watch",
+    "start": "nodemon server/index.js"
   },
   "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.27",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor"
+    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   }
 }
