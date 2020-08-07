@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/rooms');
 
 let roomSchema = mongoose.Schema ({
-	roomId: { type: Number, unique: true }
+	roomId: { type: Number, unique: true },
 	nightlyPrice: Number,
 	weeklyPrice: Number,
 	monthlyPrice: Number,

@@ -9,16 +9,23 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js --watch",
-    "start": "nodemon server/index.js"
+    "start": "nodemon server/index.js",
+    "seed": "node server/seed.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
     "express": "^4.17.1",
     "mongoose": "^5.9.27",
+    "nodemon": "^2.0.4",
+    "path": "^0.12.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "faker": "^4.1.0",
     "lodash": "^4.17.19",
