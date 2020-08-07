@@ -1,12 +1,17 @@
 const express = require('express');
+const router = express.Router();
+let db = require('../database/index.js');
 let app = express();
 
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+app.use(express.static(__dirname + '/../public'));
+
+
+app.get(`/listing/${id}`, (req, res) => {
+  res.send('Hello World')
 })
 
 const port = 5000;
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`App listening at http://localhost:${port}`)
 })

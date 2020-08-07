@@ -6,6 +6,7 @@ const _ = require('lodash');
 const url = 'mongodb://localhost:27017';
 
 const dbName = 'rooms';
+// this is sample code to test
 
 MongoClient.connect(url, function(err, client) {
   assert.equal(null, err);
