@@ -24,4 +24,4 @@ let Room = mongoose.model('Room', roomSchema);
 
 
 
-module.exports.Room = Room;
+module.exports = Room;
