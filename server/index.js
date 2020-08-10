@@ -8,7 +8,6 @@ app.use(express.static(__dirname + '/../public'));
 
 
 app.get('/listing/:id', (req, res) => {
-  console.log(req.params.id);
   var value = parseInt(req.params.id);
   Room.find({ uniqueId: value} )
     .then((rooms) => {

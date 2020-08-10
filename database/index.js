@@ -21,7 +21,4 @@ let roomSchema = mongoose.Schema ({
 
 let Room = mongoose.model('Room', roomSchema);
 
-
-
-
 module.exports = Room;
