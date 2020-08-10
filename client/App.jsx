@@ -1,6 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 
+import Calendar from './components/Calendar.jsx';
+import Calculation from './components/Calculation.jsx';
+import Guests from './components/Guests.jsx';
+import Reserve from './components/Reserve.jsx'
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +21,7 @@ class App extends React.Component {
         this.setState({
           listing: listingData
         })
+        console.log('state listing', this.state.listing)
       })
   }
 
