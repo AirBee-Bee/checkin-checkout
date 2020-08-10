@@ -13,7 +13,7 @@ MongoClient.connect(url, function(err, client) {
 
   const db = client.db(dbName);
 
-  const roomsCollection = db.collection('roomsInfo');
+  const roomsCollection = db.collection('rooms');
 
   let rooms = [];
 
