@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import moment from 'moment';
+import styled from 'styled-components';
 
 import Calendar from './components/Calendar.jsx';
 import Calculation from './components/Calculation.jsx';
@@ -16,8 +17,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       datesSelected: [],
-      checkIn: '',
-      checkOut: '',
+      checkIn: null,
+      checkOut: null,
       listing: [],
       today: '',
     }
@@ -26,7 +27,6 @@ class App extends React.Component {
   getListing(listingId) {
     axios.get(`/listing/${listingId}`)
       .then((listingData) => {
-        console.log('listingData', listingData.data)
         this.setState({
           listing: listingData.data[0]
         })
@@ -41,23 +41,33 @@ class App extends React.Component {
   }
 
   chooseCheckIn() {
-    this.setState({
-      checkIn: document.getElementById('check-in').value
-    })
-    this.chooseCheckOut();
+    var checkInDate = document.getElementById('check-in').value
+    checkInDate = checkInDate.split('-');
+    var checkInDateString = checkInDate[1] + checkInDate[2] + checkInDate[0];
+    var inDate = moment(checkInDateString, "MMDDYYYY").format('L');
 
-    console.log('this.state.checkIn', this.state.checkIn);
+    this.setState({
+      checkIn: inDate
+    })
+
+    console.log(this.state.checkIn, 'this.state.checkIn');
+    this.chooseCheckOut();
   }
 
   chooseCheckOut() {
+    var checkOutDate = document.getElementById('check-out').value
+    checkOutDate = checkOutDate.split('-');
+    var checkOutDateString = checkOutDate[1] + checkOutDate[2] + checkOutDate[0];
+    var outDate = moment(checkOutDateString, "MMDDYYYY").format('L');
+
     this.setState({
-      checkOut: document.getElementById('check-out').value
+      checkOut: outDate
     })
     if(this.state.checkIn > this.state.checkOut && this.state.checkOut !== null && this.state.checkIn !== null) {
       alert('choose a valid checkin time');
       this.setState({
-        checkIn: '',
-        checkOut: ''
+        checkIn: null,
+        checkOut: null
       })
     } else {
       this.chooseDates();
@@ -67,10 +77,12 @@ class App extends React.Component {
   }
 
   chooseDates() {
-    if (this.state.checkOut && this.state.checkIn) {
+    if (this.state.checkOut !== null && this.state.checkIn !== null) {
       var result = [];
-      var testDate = this.state.checkIn + 1;
-      console.log(testDate);
+      var daysTotal = this.stateCheckout.diff(this.state.checkIn, 'days');
+      console.log(daysTotal, 'days total');
+
+
 
 
       // while (testDate <= this.stateCheckout) {
@@ -87,7 +99,7 @@ class App extends React.Component {
     console.log('date', date);
     this.setState({
       today: date
-    });
+    })
 
   }
 
@@ -104,18 +116,32 @@ class App extends React.Component {
   // }
 
   render() {
+    const AppStyle = styled.div`
+      width: 30%;
+      height: 10%;
+      padding: 24px;
+      color: rgb(34, 34, 34);
+      display: block
+      font-size: 16px
+      border: 1px solid rgb(221, 221, 221);
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+      box-sizing: border-box;
+    `;
     return (
-      <Router>
-        <div className="allComponents">
-          <Route path="/listing/">
-            <Ratings listing={this.state.listing}/>
-            <Calendar listing={this.state.listing} onCheckIn={this.chooseCheckIn.bind(this)} onCheckOut={this.chooseCheckOut.bind(this)}/>
-            <Guests listing={this.state.listing}/>
-            <Calculation listing={this.state.listing} datesSelected={this.state.datesSelected}/>
-            <Reserve listing={this.state.listing} onSubmit={this.reserve.bind(this)} datesSelected={this.state.datesSelected}/>
-          </Route>
-        </div>
-      </Router>
+      <AppStyle>
+        <Router>
+          <div className="allComponents">
+            <Route path="/listing/">
+              <Ratings listing={this.state.listing}/>
+              <Calendar listing={this.state.listing} onCheckIn={this.chooseCheckIn.bind(this)} onCheckOut={this.chooseCheckOut.bind(this)}/>
+              <Guests listing={this.state.listing}/>
+              <Calculation listing={this.state.listing} datesSelected={this.state.datesSelected}/>
+              <Reserve listing={this.state.listing} onSubmit={this.reserve.bind(this)} datesSelected={this.state.datesSelected}/>
+            </Route>
+          </div>
+        </Router>
+      </AppStyle>
     )
   }
 }
