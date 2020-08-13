@@ -1,19 +1,11 @@
 import React from 'react';
+import CheckIn from './CheckIn.jsx';
+import CheckOut from './CheckOut.jsx';
 
-const Calendar = ({listing, chooseDates}) => (
+const Calendar = ({listing, onCheckIn, onCheckOut}) => (
   <div className="calendar">
-    <div className="calendar-input">
-      <input
-        type="date"
-        id="check-in"
-        placeholder="Add Date"
-      />
-      <input
-        type="date"
-        id="check-out"
-        placeholder = "Add Date"
-      />
-    </div>
+    <CheckIn onSelect={onCheckIn}/>
+    <CheckOut onSelect={onCheckOut}/>
   </div>
 );
 
