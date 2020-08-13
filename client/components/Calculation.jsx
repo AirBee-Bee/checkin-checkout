@@ -1,8 +1,22 @@
 import React from 'react';
 
-const Calculation = ({datesSelected, listing}) => (
-  <div className="calculation">
+//datesSelected, listing
 
-  </div>
-);
+class Calculation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
+
+  render () {
+    return (
+      <div className="calculation">
+
+      </div>
+    )
+  }
+}
+
 export default Calculation;

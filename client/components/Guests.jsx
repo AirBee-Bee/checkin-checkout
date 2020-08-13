@@ -1,9 +1,22 @@
 import React from 'react';
 
-const Guests = ({listing}) => (
-  <div className="guests">
+// listing
+class Guests extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
 
-  </div>
-);
+    };
+  }
+
+  render() {
+    return (
+      <div className="guests">
+
+      </div>
+    )
+  }
+}
+
 
 export default Guests;

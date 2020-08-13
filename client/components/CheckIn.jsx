@@ -1,13 +1,26 @@
 import React from 'react';
 
-const CheckIn = ({listing, chooseDates, onSelect}) => (
-  <div className="calendar-input-checkin">
-    <input
-      onClick={onSelect}
-      type="date"
-      id="check-in"
-    />
-  </div>
-);
+//{listing, chooseDates, onSelect}
+
+class CheckIn extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
+
+  render () {
+    return (
+      <div className="calendar-input-checkin">
+        <input
+          onClick={onSelect}
+          type="date"
+          id="check-in"
+        />
+      </div>
+    )
+  }
+}
 
 export default CheckIn;

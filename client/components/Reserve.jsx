@@ -1,9 +1,21 @@
 import React from 'react';
 
-const Reserve = ({onSubmit, datesSelected, listing}) => (
-  <div className="reserve">
-    <button id="submit-category" onClick={onSubmit}>Reserve</button>
-  </div>
-);
+// {onSubmit, datesSelected, listing}
+class Reserve extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    };
+  }
+
+  render() {
+    return (
+      <div className="reserve">
+        <button id="submit-category" onClick={onSubmit}>Reserve</button>
+      </div>
+    )
+  }
+}
 
 export default Reserve;
