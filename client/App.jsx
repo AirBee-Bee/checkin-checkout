@@ -20,7 +20,7 @@ class App extends React.Component {
       checkIn: null,
       checkOut: null,
       listing: [],
-      today: '',
+      today: null
     }
   }
 
@@ -45,7 +45,6 @@ class App extends React.Component {
     checkInDate = checkInDate.split('-');
     var checkInDateString = checkInDate[1] + checkInDate[2] + checkInDate[0];
     var inDate = moment(checkInDateString, "MMDDYYYY").format('L');
-
     this.setState({
       checkIn: inDate
     })
@@ -79,8 +78,8 @@ class App extends React.Component {
   chooseDates() {
     if (this.state.checkOut !== null && this.state.checkIn !== null) {
       var result = [];
-      var daysTotal = this.stateCheckout.diff(this.state.checkIn, 'days');
-      console.log(daysTotal, 'days total');
+      // var daysTotal = this.stateCheckout.diff(this.state.checkIn, 'days');
+      // console.log(daysTotal, 'days total');
 
 
 
@@ -100,7 +99,6 @@ class App extends React.Component {
     this.setState({
       today: date
     })
-
   }
 
   componentDidMount() {
