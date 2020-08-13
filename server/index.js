@@ -4,7 +4,7 @@ const Room = require('../database/index.js');
 let app = express();
 
 app.use(express.json())
-app.use(express.static(__dirname + '/../public'));
+app.use('/listing', express.static(__dirname + '/../public'));
 
 
 app.get('/listing/:id', (req, res) => {
