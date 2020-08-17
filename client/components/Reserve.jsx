@@ -12,7 +12,7 @@ class Reserve extends React.Component {
   render() {
     return (
       <div className="reserve">
-        <button id="submit-category" onClick={onSubmit}>Reserve</button>
+        <button id="submit-category">Reserve</button>
       </div>
     )
   }

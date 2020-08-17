@@ -1,22 +1,15 @@
 import React from 'react';
 
 // listing
-class Guests extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
-
-  render() {
-    return (
-      <div className="guests">
-
-      </div>
-    )
-  }
-}
-
+const Guests = ({listing, open, guests}) => (
+  <div className="guests" onClick={open}>
+    <div className="guest-string">
+      Guests: {guests.adults + guests.children}
+    </div>
+    <div className="down-arrow">
+      ^
+    </div>
+  </div>
+);
 
 export default Guests;
