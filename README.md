@@ -19,6 +19,7 @@
 > Some usage instructions
 
 npm start - start the server
+
 npm run-script build - builds the webpack
 
 ## Requirements
