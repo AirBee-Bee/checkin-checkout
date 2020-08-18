@@ -1,11 +1,11 @@
 import React from 'react';
 
-const GuestModal = ({close, guests, listing, addAdult, addChildren, addInfant}) => (
+const GuestModal = ({close, guests, listing, addAdult, addChildren, addInfant, subAdult, subChildren, subInfant}) => (
   <div className="guests">
     <div className="adults">
       Adults
       <div className="guest-button adults">
-        <button>-</button>
+        <button onClick={subAdult}>-</button>
         {guests.adults}
         <button onClick={addAdult}>+</button>
       </div>
@@ -16,7 +16,7 @@ const GuestModal = ({close, guests, listing, addAdult, addChildren, addInfant}) 
         Ages 2-12
       </div>
       <div className="guest-button children">
-        <button>-</button>
+        <button onClick={subChildren}>-</button>
         {guests.children}
         <button onClick={addChildren}>+</button>
       </div>
@@ -27,7 +27,7 @@ const GuestModal = ({close, guests, listing, addAdult, addChildren, addInfant}) 
         Under 2
       </div>
       <div className="guest-button infant">
-        <button>-</button>
+        <button onClick={subInfant}>-</button>
         {guests.infants}
         <button onClick={addInfant}>+</button>
       </div>

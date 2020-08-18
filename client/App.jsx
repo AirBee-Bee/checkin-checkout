@@ -41,6 +41,9 @@ class App extends React.Component {
     this.addAdult = this.addAdult.bind(this);
     this.addChildren = this.addChildren.bind(this);
     this.addInfant = this.addInfant.bind(this);
+    this.subAdult = this.subAdult.bind(this);
+    this.subChildren = this.subChildren.bind(this);
+    this.subInfant = this.subInfant.bind(this);
   }
 
   componentDidMount() {
@@ -131,22 +134,66 @@ class App extends React.Component {
   addAdult() {
     if ((this.state.guests.adults + this.state.guests.children) < this.state.listing.numberOfGuests) {
       var addedAdult = this.state.guests.adults + 1;
-      this.setState({...this.state.guests, adults: addedAdult})
-      console.log(this.state.guests.adults);
+      this.setState(prevState => {
+        let guests = Object.assign({}, prevState.guests);
+        guests.adults = addedAdult;
+        return { guests };
+      })
     }
   }
 
   addChildren() {
     if ((this.state.guests.adults + this.state.guests.children) < this.state.listing.numberOfGuests) {
       var addedChild = this.state.guests.children + 1;
-      this.setState({...this.state.guests, children: addedChild})
+      this.setState(prevState => {
+        let guests = Object.assign({}, prevState.guests);
+        guests.children = addedChild;
+        return { guests };
+      })
     }
   }
 
   addInfant() {
     if ((this.state.guests.infants) < 5) {
       var addedInfant = this.state.guests.infants + 1;
-      this.setState({...this.state.guests, infant: addedInfant})
+      this.setState(prevState => {
+        let guests = Object.assign({}, prevState.guests);
+        guests.infants = addedInfant;
+        return { guests };
+      })
+    }
+  }
+
+  subAdult() {
+    if (this.state.guests.adults > 1) {
+      var subAdult = this.state.guests.adults - 1;
+      this.setState(prevState => {
+        let guests = Object.assign({}, prevState.guests);
+        guests.adults = subAdult;
+        return { guests };
+      })
+    }
+  }
+
+  subChildren() {
+    if (this.state.guests.children > 0) {
+      var subChild = this.state.guests.children - 1;
+      this.setState(prevState => {
+        let guests = Object.assign({}, prevState.guests);
+        guests.children = subChild;
+        return { guests };
+      })
+    }
+  }
+
+  subInfant() {
+    if (this.state.guests.infants > 0) {
+      var subInfant = this.state.guests.infants - 1;
+      this.setState(prevState => {
+        let guests = Object.assign({}, prevState.guests);
+        guests.infants = subInfant;
+        return { guests };
+      })
     }
   }
 
@@ -200,6 +247,9 @@ class App extends React.Component {
                         addAdult={this.addAdult}
                         addChildren={this.addChildren}
                         addInfant={this.addInfant}
+                        subAdult={this.subAdult}
+                        subChildren={this.subChildren}
+                        subInfant={this.subInfant}
             />
           </ReactModal>
           <Calculation listing={this.state.listing}
