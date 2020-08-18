@@ -8,52 +8,52 @@ class CalendarModal extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      dateObject: moment(),
+      moment: moment(),
       allmonths: moment.months(),
       weekdayshort: moment.weekdaysShort(),
     };
   }
 
   firstDayOfMonth() {
-    let dateObject = this.state.dateObject;
-    let firstDay = moment(dateObject).startOf("month").format("d");
+    let date = this.state.moment;
+    let firstDay = moment(date).startOf("month").format("d");
     return firstDay;
   }
 
   year() {
-    return this.state.dateObject.format("Y");
+    return this.state.moment.format("Y");
   }
 
   currentDay() {
-    return this.state.dateObject.format("D");
+    return this.state.moment.format("D");
   }
 
   daysInMonth() {
-    return this.state.dateObject.daysInMonth();
+    return this.state.moment.daysInMonth();
   }
 
   month() {
-    return this.state.dateObject.format("MMMM");
+    return this.state.moment.format("MMMM");
   }
 
   setMonth(month) {
     let monthNo = this.state.allmonths.indexOf(month);
-    let dateObject = Object.assign({}, this.state.dateObject);
+    let dateObject = Object.assign({}, this.state.moment);
     dateObject = moment(dateObject).set("month", monthNo);
     this.setState({
-      dateObject: dateObject,
+      moment: dateObject,
     })
   }
 
   onPrev() {
     this.setState({
-      dateObject: this.state.dateObject.subtract(1, "month"),
+      moment: this.state.moment.subtract(1, "month"),
     })
   }
 
   onNext() {
     this.setState({
-      dateObject: this.state.dateObject.add(1, "month"),
+      moment: this.state.moment.add(1, "month"),
     })
   }
 
@@ -115,24 +115,21 @@ class CalendarModal extends React.Component {
           <div className="minimum-nights">
             Minimum Stay: {this.props.listing.minNights} nights
           </div>
-
             <CheckIn onSelect={this.props.onCheckIn}/>
             <CheckOut onSelect={this.props.onCheckOut}/>
         </div>
         <div className="calendar">
           <div className="calendar-navigation">
-            <span
-                onClick={e => {
+            <div onClick={e => {
                   this.onPrev();
                 }}
-                class="calendar-button button-prev"
-                />
-            <span
-              onClick={e => {
+                className="calendar-button button-prev">
+            -</div>
+            <div onClick={e => {
                 this.onNext();
               }}
-              className="calendar-button button-next"
-              />
+              className="calendar-button button-next">
+            +</div>
           </div>
           <div className="calendar-dates">
               <div className="month-one">
