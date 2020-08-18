@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 // const ratingsStyle = {
 //   display: inline-block
@@ -13,12 +14,19 @@ class Ratings extends React.Component {
   }
 
   render() {
+    const RatingStyle = styled.div`
+      display: inline-block;
+    `;
     return (
-      <div className="ratings-bar">
-        <h4>{listing.nightlyPrice}</h4>
-        <h4>{listing.avgRating}</h4>
-        <h5>({listing.ratingNum})</h5>
-      </div>
+      <RatingStyle>
+        <div className="ratings-bar">
+          <div className="nightly-price">{this.props.listing.nightlyPrice}</div>
+          <div className="ratings">
+            <div className="average-rating">{this.props.listing.avgRating}</div>
+            <div className="rating-num">({this.props.listing.ratingNum})</div>
+          </div>
+        </div>
+      </RatingStyle>
     )
   }
 }
