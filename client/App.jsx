@@ -38,7 +38,9 @@ class App extends React.Component {
     this.closeCalendar = this.closeCalendar.bind(this);
     this.chooseCheckIn = this.chooseCheckIn.bind(this);
     this.chooseCheckOut = this.chooseCheckOut.bind(this);
-
+    this.addAdult = this.addAdult.bind(this);
+    this.addChildren = this.addChildren.bind(this);
+    this.addInfant = this.addInfant.bind(this);
   }
 
   componentDidMount() {
@@ -69,7 +71,7 @@ class App extends React.Component {
     var checkInDate = document.getElementById('check-in').value
     checkInDate = checkInDate.split('-');
     var checkInDateString = checkInDate[1] + checkInDate[2] + checkInDate[0];
-    var inDate = moment(checkInDateString, "MMDDYYYY").format('L');
+    // var inDate = moment(checkInDateString, "MMDDYYYY").format('L');
     this.setState({
       checkIn: document.getElementById('check-in').value
     })
@@ -82,7 +84,7 @@ class App extends React.Component {
     var checkOutDate = document.getElementById('check-out').value
     checkOutDate = checkOutDate.split('-');
     var checkOutDateString = checkOutDate[1] + checkOutDate[2] + checkOutDate[0];
-    var outDate = moment(checkOutDateString, "MMDDYYYY").format('L');
+    // var outDate = moment(checkOutDateString, "MMDDYYYY").format('L');
 
     this.setState({
       checkOut: document.getElementById('check-out').value
@@ -126,6 +128,28 @@ class App extends React.Component {
     })
   }
 
+  addAdult() {
+    if ((this.state.guests.adults + this.state.guests.children) < this.state.listing.numberOfGuests) {
+      var addedAdult = this.state.guests.adults + 1;
+      this.setState({...this.state.guests, adults: addedAdult})
+      console.log(this.state.guests.adults);
+    }
+  }
+
+  addChildren() {
+    if ((this.state.guests.adults + this.state.guests.children) < this.state.listing.numberOfGuests) {
+      var addedChild = this.state.guests.children + 1;
+      this.setState({...this.state.guests, children: addedChild})
+    }
+  }
+
+  addInfant() {
+    if ((this.state.guests.infants) < 5) {
+      var addedInfant = this.state.guests.infants + 1;
+      this.setState({...this.state.guests, infant: addedInfant})
+    }
+  }
+
   openGuests() {
     this.setState({ guestModal: true});
   }
@@ -143,19 +167,6 @@ class App extends React.Component {
   }
 
   render() {
-    const AppStyle = styled.div`
-      width: 30%;
-      height: 10%;
-      padding: 24px;
-      color: rgb(34, 34, 34);
-      font-size: 16px;
-      border: 1px solid rgb(221, 221, 221);
-      border-radius: 12px;
-      box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
-      box-sizing: border-box;
-      font-weight: 250;
-      font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
-    `;
     return (
       <AppStyle>
         <div className="allComponents">
@@ -167,6 +178,7 @@ class App extends React.Component {
           />
           <ReactModal isOpen={this.state.calendarModal}
                       onRequestClose={this.closeCalendar}
+                      style={CalendarStyles}
           >
             <CalendarModal close={this.closeCalendar}
                            onCheckIn={this.chooseCheckIn}
@@ -176,11 +188,19 @@ class App extends React.Component {
           </ReactModal>
           <Guests listing={this.state.listing}
                   open={this.openGuests}
-                  guests={this.state.guests}/>
+                  guests={this.state.guests}
+          />
           <ReactModal isOpen={this.state.guestModal}
                       onRequestClose={this.closeGuests}
+                      style={GuestStyles}
           >
-            <GuestModal close={this.closeGuests} guests={this.state.guests}/>
+            <GuestModal close={this.closeGuests}
+                        guests={this.state.guests}
+                        listing={this.state.listing}
+                        addAdult={this.addAdult}
+                        addChildren={this.addChildren}
+                        addInfant={this.addInfant}
+            />
           </ReactModal>
           <Calculation listing={this.state.listing}
                        datesSelected={this.state.datesSelected}
@@ -193,5 +213,61 @@ class App extends React.Component {
     )
   }
 }
+
+const AppStyle = styled.div`
+      width: 30%;
+      height: 10%;
+      padding: 24px;
+      color: rgb(34, 34, 34);
+      font-size: 16px;
+      border: 1px solid rgb(221, 221, 221);
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+      box-sizing: border-box;
+      font-weight: 250;
+      font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+`;
+
+const GuestStyles = {
+  content: {
+    display: 'block',
+    color: 'rgb(34, 34, 34)',
+    justifyContent: 'flex-start',
+    position: 'absolute',
+    height: '320px',
+    width: '280px',
+    backgroundColor: 'white',
+    outlineColor: 'rgb(72, 72, 72)',
+    borderRadius: '4px',
+    flexFlow: 'row wrap',
+  }
+};
+
+const CalendarStyles = {
+  overlay: {
+    top: '0px',
+    left: '0px',
+    right: '0px',
+    bottom: '0px',
+    height: '100%',
+    width: '100%',
+  },
+  content: {
+    justifyContent: 'flex-start',
+    top: '40px',
+    left: '40px',
+    right: '40px',
+    bottom: '40px',
+    height: 'auto',
+    width: 'auto',
+    padding: '24px 24px 24px 24px',
+    transform: '(-50%, -50%)',
+    backgroundColor: 'white',
+    outlineColor: 'rgb(72, 72, 72)',
+    borderRadius: '12px',
+    maxWidth: '1000px',
+    flexFlow: 'row wrap'
+  }
+};
 
 export default App;
