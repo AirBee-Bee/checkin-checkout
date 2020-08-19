@@ -115,7 +115,7 @@ class CalendarModal extends React.Component {
           <div className="minimum-nights">
             Minimum Stay: {this.props.listing.minNights} nights
           </div>
-            <CheckIn onSelect={this.props.onCheckIn}/>
+            <CheckIn onSelect={this.props.onCheckIn} />
             <CheckOut onSelect={this.props.onCheckOut}/>
         </div>
         <div className="calendar">
@@ -144,7 +144,7 @@ class CalendarModal extends React.Component {
               </div>
           </div>
           <div>
-            <button>Clear Dates</button>
+            <button onClick={this.props.clearDates}>Clear Dates</button>
             <button onClick={this.props.close}>Close</button>
           </div>
         </div>
