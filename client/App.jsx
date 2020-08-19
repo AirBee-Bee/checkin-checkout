@@ -38,6 +38,7 @@ class App extends React.Component {
     this.closeCalendar = this.closeCalendar.bind(this);
     this.chooseCheckIn = this.chooseCheckIn.bind(this);
     this.chooseCheckOut = this.chooseCheckOut.bind(this);
+    this.clearDates = this.clearDates.bind(this);
     this.addAdult = this.addAdult.bind(this);
     this.addChildren = this.addChildren.bind(this);
     this.addInfant = this.addInfant.bind(this);
@@ -79,49 +80,37 @@ class App extends React.Component {
       checkIn: document.getElementById('check-in').value
     })
 
-    console.log(this.state.checkIn, 'this.state.checkIn');
+    console.log(typeof this.state.checkIn, this.state.checkIn, 'this.state.checkIn');
     this.chooseCheckOut();
   }
 
   chooseCheckOut() {
     var checkOutDate = document.getElementById('check-out').value
-    checkOutDate = checkOutDate.split('-');
-    var checkOutDateString = checkOutDate[1] + checkOutDate[2] + checkOutDate[0];
+    var checkOutMoment = moment(checkOutDate).format("MMDDYYYY");
+
     // var outDate = moment(checkOutDateString, "MMDDYYYY").format('L');
 
     this.setState({
-      checkOut: document.getElementById('check-out').value
+      checkOut: checkOutMoment
     })
     if(this.state.checkIn > this.state.checkOut && this.state.checkOut !== null && this.state.checkIn !== null) {
       alert('choose a valid checkin time');
-      this.setState({
-        checkIn: null,
-        checkOut: null
-      })
-    } else {
-
+      clearDates();
     }
 
-    console.log('this.state.checkout', this.state.checkOut);
+    console.log('this.state.checkout', this.state.checkOut, typeof this.state.checkOut);
   }
 
-  // chooseDates() {
-  //   if (this.state.checkOut !== null && this.state.checkIn !== null) {
-  //     var result = [];
-  //     // var daysTotal = this.stateCheckout.diff(this.state.checkIn, 'days');
-  //     // console.log(daysTotal, 'days total');
+  clearDates() {
+    document.getElementById('check-in').value = 'CHECK-IN';
+    document.getElementById('check-out').value = 'CHECKOUT';
+    this.setState({
+      checkIn: null,
+      checkOut: null
+    })
+  }
 
 
-
-
-  //     // while (testDate <= this.stateCheckout) {
-  //     //   result.push(testDate);
-  //     //   console.log('testDate', testDate)
-  //     //   testDate.setDate(testDate.getDate() + 1);
-  //     // }
-  //     // console.log('result', result);
-  //   }
-  // }
 
   todaysDate() {
     var date = moment().format('L');
@@ -231,6 +220,9 @@ class App extends React.Component {
                            onCheckIn={this.chooseCheckIn}
                            onCheckOut={this.chooseCheckOut}
                            listing={this.state.listing}
+                           checkInDate={this.state.checkIn}
+                           checkOutDate={this.state.checkOut}
+                           clearDates={this.clearDates}
             />
           </ReactModal>
           <Guests listing={this.state.listing}
@@ -263,10 +255,10 @@ class App extends React.Component {
     )
   }
 }
-
+//comment to add styling
 const AppStyle = styled.div`
-      width: 30%;
-      height: 10%;
+      width: 375px;
+      height: 480px;
       padding: 24px;
       color: rgb(34, 34, 34);
       font-size: 16px;
