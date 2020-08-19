@@ -255,7 +255,7 @@ class App extends React.Component {
     )
   }
 }
-
+//comment to add styling
 const AppStyle = styled.div`
       width: 375px;
       height: 480px;
