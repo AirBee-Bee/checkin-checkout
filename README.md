@@ -22,6 +22,8 @@ npm start - start the server
 
 npm run-script build - builds the webpack
 
+npm run-script seed or npm seed - seeds the database
+
 ## Requirements
 
 An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
