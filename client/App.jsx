@@ -170,6 +170,7 @@ class App extends React.Component {
         numberOfNights: difference
       }, () => {
         this.nightlyPriceCalc();
+        this.total();
       })
     }
   }
@@ -188,6 +189,7 @@ class App extends React.Component {
         return { guests };
       })
       this.nightlyPriceCalc();
+      this.total();
     }
   }
 
@@ -200,6 +202,7 @@ class App extends React.Component {
         return { guests };
       })
       this.nightlyPriceCalc();
+      this.total();
     }
   }
 
@@ -223,6 +226,7 @@ class App extends React.Component {
         return { guests };
       })
       this.nightlyPriceCalc();
+      this.total();
     }
   }
 
@@ -235,6 +239,7 @@ class App extends React.Component {
         return { guests };
       })
       this.nightlyPriceCalc();
+      this.total();
     }
   }
 
