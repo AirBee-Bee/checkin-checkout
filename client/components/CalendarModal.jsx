@@ -36,25 +36,21 @@ class CalendarModal extends React.Component {
     return this.state.moment.format("MMMM");
   }
 
-  setMonth(month) {
-    let monthNo = this.state.allmonths.indexOf(month);
-    let dateObject = Object.assign({}, this.state.moment);
-    dateObject = moment(dateObject).set("month", monthNo);
-    this.setState({
-      moment: dateObject,
-    })
+  monthNum() {
+    return this.state.moment.format("MM");
   }
 
-  onPrev() {
+  previousMonth() {
     this.setState({
       moment: this.state.moment.subtract(1, "month"),
     })
   }
 
-  onNext() {
+  nextMonth() {
     this.setState({
       moment: this.state.moment.add(1, "month"),
     })
+    console.log
   }
 
   render() {
@@ -74,7 +70,22 @@ class CalendarModal extends React.Component {
         <td key={d} className={`calendar-day ${currentDay}`}>
           <span
             onClick={e => {
-              this.onDayClick(e, d);
+              if(this.props.checkInSelected) {
+                let months = this.monthNum();
+                let years = this.year();
+                let dayString = months.toString() + d.toString() + years.toString();
+                this.props.onCheckIn(dayString);
+                //this.props.selectCheckOut();
+                console.log(dayString, months, d, years, 'dayString M D Y')
+
+              } else if (this.props.checkOutSelected) {
+                let months = this.monthNum();
+                let years = this.year();
+                let dayString = months.toString() + d.toString() + years.toString();
+                this.props.onCheckOut(dayString)
+                console.log(dayString, months, d, years, 'dayString M D Y')
+                //this.props.selectCheckIn();
+              }
             }}
           >
             {d}
@@ -84,11 +95,11 @@ class CalendarModal extends React.Component {
     }
 
 
-    var totalSlots = [...blanks, ...daysInMonth];
+    var totalSpaces = [...blanks, ...daysInMonth];
     let rows = [];
     let cells = [];
 
-    totalSlots.forEach((row, i) => {
+    totalSpaces.forEach((row, i) => {
       if (i % 7 !== 0) {
         cells.push(row);
       } else {
@@ -96,7 +107,7 @@ class CalendarModal extends React.Component {
         cells = [];
         cells.push(row);
       }
-      if (i === totalSlots.length - 1) {
+      if (i === totalSpaces.length - 1) {
         // let insertRow = cells.slice();
         rows.push(cells);
       }
@@ -115,18 +126,18 @@ class CalendarModal extends React.Component {
           <div className="minimum-nights">
             Minimum Stay: {this.props.listing.minNights} nights
           </div>
-            <CheckIn onSelect={this.props.onCheckIn} />
-            <CheckOut onSelect={this.props.onCheckOut}/>
+            <CheckIn onSelect={this.props.selectCheckIn} />
+            <CheckOut onSelect={this.props.selectCheckOut}/>
         </div>
         <div className="calendar">
           <div className="calendar-navigation">
             <div onClick={e => {
-                  this.onPrev();
+                  this.previousMonth();
                 }}
                 className="calendar-button button-prev">
             -</div>
             <div onClick={e => {
-                this.onNext();
+                this.nextMonth();
               }}
               className="calendar-button button-next">
             +</div>

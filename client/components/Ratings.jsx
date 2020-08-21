@@ -16,41 +16,38 @@ class Ratings extends React.Component {
   render() {
     return (
       <RatingBarStyle>
-        <div className="ratings-bar">
-          <PriceStyle>
-            <div className="nightly-price">
-              ${this.props.listing.nightlyPrice}
-              <div className="price-description">
-                / night
-              </div>
-            </div>
-          </PriceStyle>
-          <div className="ratings">
-            <div className="average-rating">
-              {this.props.listing.avgRating}
-            </div>
-            <div className="rating-num">
-              ({this.props.listing.ratingNum})
-            </div>
-          </div>
-        </div>
+        <PriceStyle>
+          ${this.props.listing.nightlyPrice} / night
+        </PriceStyle>
+        <RatingStyle>
+          {this.props.listing.avgRating} ({this.props.listing.ratingNum})
+        </RatingStyle>
       </RatingBarStyle>
     )
   }
 }
 
 const RatingBarStyle = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-evenly;
+  display: inline-grid;
+  grid-template-columns: 50% 50%;
+  height: 50px;
+  width: 100%;
 `;
 
 const PriceStyle = styled.div`
+  display: flex;
+  grid-column-start: 1;
+  grid-column-end: 2;
   font-size: 22px;
-  display: inline;
   font-weight: 600;
-  margin-right: 30px
+`;
+
+const RatingStyle = styled.div`
+  grid-column-start: 2;
+  grid-column-end: 3;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: right;
 `;
 
 export default Ratings;
