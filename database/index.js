@@ -4,8 +4,8 @@ mongoose.connect('mongodb://localhost/rooms');
 let roomSchema = mongoose.Schema ({
 	roomId: { type: Number, unique: true },
 	nightlyPrice: Number,
-	weeklyPrice: Number,
-	monthlyPrice: Number,
+	weeklyPrice: Boolean,
+	monthlyPrice: Boolean,
 	avgRating: Number,
 	ratingNum: Number,
 	cleaningFee: Number,

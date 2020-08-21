@@ -19,8 +19,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       datesSelected: [],
-      checkIn: null,
-      checkOut: null,
+      checkIn: "CHECK-IN",
+      checkOut: "CHECK-OUT",
       listing: [],
       today: null,
       guestModal: false,
@@ -29,7 +29,12 @@ class App extends React.Component {
         adults: 1,
         children: 0,
         infants: 0
-      }
+      },
+      selectedCheckIn: false,
+      selectedCheckOut: false,
+      numberOfNights: 0,
+      nightlyPriceWGuests: 0,
+      totalPrice: 0,
     }
     this.getListing = this.getListing.bind(this);
     this.openGuests = this.openGuests.bind(this);
@@ -39,27 +44,32 @@ class App extends React.Component {
     this.chooseCheckIn = this.chooseCheckIn.bind(this);
     this.chooseCheckOut = this.chooseCheckOut.bind(this);
     this.clearDates = this.clearDates.bind(this);
+    this.selectCheckIn = this.selectCheckIn.bind(this);
+    this.selectCheckOut = this.selectCheckOut.bind(this);
     this.addAdult = this.addAdult.bind(this);
     this.addChildren = this.addChildren.bind(this);
     this.addInfant = this.addInfant.bind(this);
     this.subAdult = this.subAdult.bind(this);
     this.subChildren = this.subChildren.bind(this);
     this.subInfant = this.subInfant.bind(this);
+    this.nightlyPriceCalc = this.nightlyPriceCalc.bind(this);
+    this.total = this.total.bind(this);
   }
 
   componentDidMount() {
     this.getListing();
     this.todaysDate();
-    console.log('should be todays date', this.state.today)
   }
 
   getListing() {
     var id = window.location.href.split('/');
     axios.get(`/listing/${id[4]}/rooms`)
       .then((listingData) => {
-
         this.setState({
           listing: listingData.data[0]
+        }, () => {
+          console.log('weeklyprice', this.state.listing.weeklyPrice);
+          console.log('monthlyprice', this.state.listing.monthlyPrice);
         })
       })
   }
@@ -71,53 +81,102 @@ class App extends React.Component {
       })
   }
 
-  chooseCheckIn() {
-    var checkInDate = document.getElementById('check-in').value
-    checkInDate = checkInDate.split('-');
-    var checkInDateString = checkInDate[1] + checkInDate[2] + checkInDate[0];
-    // var inDate = moment(checkInDateString, "MMDDYYYY").format('L');
+  selectCheckIn() {
     this.setState({
-      checkIn: document.getElementById('check-in').value
+      selectedCheckIn: true,
+      selectedCheckOut: false
     })
-
-    console.log(typeof this.state.checkIn, this.state.checkIn, 'this.state.checkIn');
-    this.chooseCheckOut();
   }
 
-  chooseCheckOut() {
-    var checkOutDate = document.getElementById('check-out').value
-    var checkOutMoment = moment(checkOutDate).format("MMDDYYYY");
-
-    // var outDate = moment(checkOutDateString, "MMDDYYYY").format('L');
-
+  selectCheckOut() {
     this.setState({
-      checkOut: checkOutMoment
+      selectedCheckIn: false,
+      selectedCheckOut: true
     })
-    if(this.state.checkIn > this.state.checkOut && this.state.checkOut !== null && this.state.checkIn !== null) {
+  }
+
+  chooseCheckIn(day) {
+    var checkInMoment = moment(day, "MMDDYYYY").format('L')
+    this.setState({ checkIn: checkInMoment }, () => {
+      console.log('checkin updated', this.state.checkIn)
+      this.checkDays();
+    })
+  }
+
+  chooseCheckOut(day) {
+    var checkOutMoment = moment(day, "MMDDYYYY").format('L');
+    this.setState({ checkOut: checkOutMoment }, () => {
+      console.log('checkout updated', this.state.checkOut)
+      this.checkDays();
+    })
+  }
+
+  checkDays() {
+    if(this.state.checkIn > this.state.checkOut && this.state.checkOut !== "CHECK-OUT" && this.state.checkIn !== "CHECK-IN") {
       alert('choose a valid checkin time');
-      clearDates();
+      this.clearDates(3);
+    } else {
+      if (this.state.checkIn < this.state.today && this.state.checkIn !== "CHECK-IN") {
+        alert('choose a valid checkin time');
+        this.clearDates(1)
+      } else if (this.state.checkOut < this.state.today && this.state.checkOut !== "CHECK-OUT") {
+        alert('choose a valid checkout time');
+        this.clearDates(2)
+      } else if (this.state.checkOut !== "CHECK-OUT" && this.state.checkIn !== "CHECK-IN"){
+        this.setDates();
+      }
     }
-
-    console.log('this.state.checkout', this.state.checkOut, typeof this.state.checkOut);
   }
 
-  clearDates() {
-    document.getElementById('check-in').value = 'CHECK-IN';
-    document.getElementById('check-out').value = 'CHECKOUT';
-    this.setState({
-      checkIn: null,
-      checkOut: null
-    })
+  clearDates(val) {
+    console.log('clear dates is firing')
+    if (val === 1) {
+      this.setState({ checkIn: "CHECK-IN" })
+    }
+    if (val === 2) {
+      this.setState({ checkOut: "CHECK-OUT" })
+    }
+    if (val === 3 || arguments.length === 0) {
+      this.setState({
+        checkIn: "CHECK-IN",
+        checkOut: "CHECK-OUT"
+      })
+    }
   }
 
+  setDates() {
+    this.setState({ datesSelected: [] })
 
+    let firstDay = moment(this.state.checkIn, "L");
+    console.log('firstday', firstDay)
+    let lastDay = moment(this.state.checkOut, "L");
+    let difference = lastDay.diff(firstDay, "days");
+    let datesArr = [];
+    if (this.state.listing.maxNights < difference) {
+      alert('exceeded the maximum number of nights');
+      this.clearDates(3)
+    } else if (this.state.listing.minNights > difference) {
+      alert('have not met the minimum requirement for number of nights');
+      this.clearDates(3);
+    } else {
+      let index = 0;
+      while (index <= difference) {
+        datesArr.push(moment(firstDay, "L").add(index, "days").format("L"));
+        index++;
+      }
+      console.log(datesArr)
+      this.setState({
+        datesSelected: datesArr,
+        numberOfNights: difference
+      }, () => {
+        this.nightlyPriceCalc();
+      })
+    }
+  }
 
   todaysDate() {
     var date = moment().format('L');
-    console.log('date', date);
-    this.setState({
-      today: date
-    })
+    this.setState({ today: date })
   }
 
   addAdult() {
@@ -128,6 +187,7 @@ class App extends React.Component {
         guests.adults = addedAdult;
         return { guests };
       })
+      this.nightlyPriceCalc();
     }
   }
 
@@ -139,6 +199,7 @@ class App extends React.Component {
         guests.children = addedChild;
         return { guests };
       })
+      this.nightlyPriceCalc();
     }
   }
 
@@ -161,6 +222,7 @@ class App extends React.Component {
         guests.adults = subAdult;
         return { guests };
       })
+      this.nightlyPriceCalc();
     }
   }
 
@@ -172,6 +234,7 @@ class App extends React.Component {
         guests.children = subChild;
         return { guests };
       })
+      this.nightlyPriceCalc();
     }
   }
 
@@ -187,7 +250,7 @@ class App extends React.Component {
   }
 
   openGuests() {
-    this.setState({ guestModal: true});
+    this.setState({ guestModal: true });
   }
 
   closeGuests() {
@@ -202,72 +265,117 @@ class App extends React.Component {
     this.setState({ calendarModal: false});
   }
 
+  nightlyPriceCalc() {
+    console.log('nightly price is being called')
+    if ((this.state.guests.adults + this.state.guests.children) > this.state.listing.guestsIncluded) {
+      let diff = this.state.guests.adults + this.state.guests.children - this.state.listing.guestsIncluded;
+      let totalNightPrice = (this.state.listing.nightlyPrice + (diff * this.state.listing.pricePerGuest));
+      this.setState({ nightlyPriceWGuests: totalNightPrice }, () => {
+        console.log(this.state.nightlyPriceWGuests, 'this.state.nightlyPrice')
+      })
+    } else {
+      this.setState({ nightlyPriceWGuests: this.state.listing.nightlyPrice}, () => {
+        console.log(this.state.nightlyPriceWGuests, 'nightly price with guests')
+      })
+    }
+  }
+
+  total() {
+    let accomadations = this.state.numberOfNights * this.state.nightlyPriceWGuests;
+    let cleaning = this.state.listing.cleaningFee;
+    let service = this.state.listing.serviceBase * this.state.numberOfNights;
+    let taxes = this.state.numberOfNights * this.state.listing.taxesBase
+
+    let totalAmount = accomadations + cleaning + service + taxes;
+    this.setState({ totalPrice: totalAmount }, () => {
+      console.log(this.state.totalPrice, 'total price of listing');
+    })
+  }
+
   render() {
     return (
       <AppStyle>
-        <div className="allComponents">
           <Ratings listing={this.state.listing}/>
-          <Calendar listing={this.state.listing}
-                    onCheckIn={this.chooseCheckIn}
-                    onCheckOut={this.chooseCheckOut}
-                    open={this.openCalendar}
-          />
-          <ReactModal isOpen={this.state.calendarModal}
-                      onRequestClose={this.closeCalendar}
-                      style={CalendarStyles}
-          >
-            <CalendarModal close={this.closeCalendar}
-                           onCheckIn={this.chooseCheckIn}
-                           onCheckOut={this.chooseCheckOut}
-                           listing={this.state.listing}
-                           checkInDate={this.state.checkIn}
-                           checkOutDate={this.state.checkOut}
-                           clearDates={this.clearDates}
+          <CalendarGuests>
+            <Calendar listing={this.state.listing}
+                      onCheckIn={this.selectCheckIn}
+                      onCheckOut={this.selectCheckOut}
+                      open={this.openCalendar}
+                      checkInDate={this.state.checkIn}
+                      checkOutDate={this.state.checkOut}
             />
-          </ReactModal>
-          <Guests listing={this.state.listing}
-                  open={this.openGuests}
-                  guests={this.state.guests}
-          />
-          <ReactModal isOpen={this.state.guestModal}
-                      onRequestClose={this.closeGuests}
-                      style={GuestStyles}
-          >
-            <GuestModal close={this.closeGuests}
-                        guests={this.state.guests}
-                        listing={this.state.listing}
-                        addAdult={this.addAdult}
-                        addChildren={this.addChildren}
-                        addInfant={this.addInfant}
-                        subAdult={this.subAdult}
-                        subChildren={this.subChildren}
-                        subInfant={this.subInfant}
+            <ReactModal isOpen={this.state.calendarModal}
+                        onRequestClose={this.closeCalendar}
+                        style={CalendarStyles}
+            >
+              <CalendarModal close={this.closeCalendar}
+                            onCheckIn={this.chooseCheckIn}
+                            onCheckOut={this.chooseCheckOut}
+                            listing={this.state.listing}
+                            checkInDate={this.state.checkIn}
+                            checkOutDate={this.state.checkOut}
+                            clearDates={this.clearDates}
+                            checkInSelected={this.state.selectedCheckIn}
+                            checkOutSelected={this.state.selectedCheckOut}
+                            selectCheckIn={this.selectCheckIn}
+                            selectCheckOut={this.selectCheckOut}
+              />
+            </ReactModal>
+            <Guests listing={this.state.listing}
+                    open={this.openGuests}
+                    guests={this.state.guests}
             />
-          </ReactModal>
+            <ReactModal isOpen={this.state.guestModal}
+                        onRequestClose={this.closeGuests}
+                        style={GuestStyles}
+            >
+              <GuestModal close={this.closeGuests}
+                          guests={this.state.guests}
+                          listing={this.state.listing}
+                          addAdult={this.addAdult}
+                          addChildren={this.addChildren}
+                          addInfant={this.addInfant}
+                          subAdult={this.subAdult}
+                          subChildren={this.subChildren}
+                          subInfant={this.subInfant}
+              />
+            </ReactModal>
+          </CalendarGuests>
           <Calculation listing={this.state.listing}
                        datesSelected={this.state.datesSelected}
+                       night={this.state.numberOfNights}
+                       guests={this.state.guests}
+                       nightlyPrice={this.state.nightlyPriceWGuests}
+                       totalPrice={this.state.totalPrice}
           />
           <Reserve listing={this.state.listing}
                    datesSelected={this.state.datesSelected}
           />
-        </div>
       </AppStyle>
     )
   }
 }
 //comment to add styling
 const AppStyle = styled.div`
-      width: 375px;
-      height: 480px;
-      padding: 24px;
-      color: rgb(34, 34, 34);
-      font-size: 16px;
-      border: 1px solid rgb(221, 221, 221);
-      border-radius: 12px;
-      box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
-      box-sizing: border-box;
-      font-weight: 250;
-      font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+  display: flex;
+  flex-flow: column wrap;
+  width: 375px;
+  height: 480px;
+  padding: 24px;
+  color: rgb(34, 34, 34);
+  font-size: 16px;
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+  box-sizing: border-box;
+  font-weight: 250;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+`;
+
+const CalendarGuests = styled.div`
+  padding-bottom: 10px;
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 8px;
 `;
 
 const GuestStyles = {
