@@ -124,6 +124,8 @@ class App extends React.Component {
         this.clearDates(2)
       } else if (this.state.checkOut !== "CHECK-OUT" && this.state.checkIn !== "CHECK-IN"){
         this.setDates();
+        this.nightlyPriceCalc();
+        this.total();
       }
     }
   }
