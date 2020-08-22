@@ -126,8 +126,8 @@ class CalendarModal extends React.Component {
           <div className="minimum-nights">
             Minimum Stay: {this.props.listing.minNights} nights
           </div>
-            <CheckIn onSelect={this.props.selectCheckIn} />
-            <CheckOut onSelect={this.props.selectCheckOut}/>
+            <CheckIn onSelect={this.props.selectCheckIn} checkInDate={this.props.checkInDate}/>
+            <CheckOut onSelect={this.props.selectCheckOut} checkOutDate={this.props.checkOutDate}/>
         </div>
         <div className="calendar">
           <div className="calendar-navigation">
