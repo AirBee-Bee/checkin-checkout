@@ -32,7 +32,9 @@ function String(props) {
 }
 const Guests = ({listing, open, guests}) => (
   <GuestStyle onClick={open}>
-    <String adults={guests.adults} kids={guests.children} babies={guests.infants} />
+    <StringStyle>
+      <String adults={guests.adults} kids={guests.children} babies={guests.infants} />
+    </StringStyle>
     <ArrowStyle>
       ▼
     </ArrowStyle>
@@ -41,12 +43,24 @@ const Guests = ({listing, open, guests}) => (
 
 const GuestStyle = styled.div`
   display: flex;
+  border-top: 1px solid rgb(221, 221, 221);
   width: 100%;
+  font-size: 16px;
+  justify-content: space-between;
+  font-weight: 400;
+  height: 56px;
+  cursor: pointer;
+`;
+
+const StringStyle = styled.div`
+  padding: 26px 36px 10px 12px;
+  font-size: 14px;
 `;
 
 const ArrowStyle = styled.div`
-  display: flex;
-  text-align: right;
+  margin-right: 15px;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 export default Guests;
