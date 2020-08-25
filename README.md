@@ -18,11 +18,11 @@
 
 > Some usage instructions
 
-npm start - start the server
+1) mongo service start mongodb-community - starts your database (if not already running)
+2) npm run-script seed - seeds the database
+3) npm run-script build - builds the webpack
+4) npm start - start the server
 
-npm run-script build - builds the webpack
-
-npm run-script seed or npm seed - seeds the database
 
 ## Requirements
 
