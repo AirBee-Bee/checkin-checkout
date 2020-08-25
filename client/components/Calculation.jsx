@@ -62,7 +62,7 @@ class Calculation extends React.Component {
           <TotalCalculationStyle>
             Total
             ${this.props.totalPrice}
-           </TotalCalculationStyle>
+          </TotalCalculationStyle>
         </CalculationStyle>
       );
     } else {
@@ -72,28 +72,40 @@ class Calculation extends React.Component {
 }
 
 const CalculationStyle = styled.div`
-  display: flex;
+  justify-content: space-between;
   flex-flow: column wrap;
   width: 100%;
+  line-height: 20px;
+  font-weight: 400;
 `;
 
 const TotalCalculationStyle = styled.div`
-  width: 100%
+  width: 100%;
+  border-top: 1px solid rgb(221, 221, 221);
+  font-size: 16px;
+  font-weight: 800;
+  margin-top: 16px;
+  padding-top: 24px;
+
 `;
 
 const AccomodationStyle = styled.div`
-  width: 100%
+  width: 100%;
+  padding-bottom: 12px;
 `;
 
 const CleaningFeeStyle = styled.div`
-  width: 100%
+  width: 100%;
+  padding-bottom: 12px;
 `;
 
 const ServiceFeeStyle = styled.div`
-  width: 100%
+  width: 100%;
+  padding-bottom: 12px;
 `;
 
 const TaxesStyle = styled.div`
-  width: 100%
+  width: 100%;
+  padding-bottom: 12px;
 `;
 export default Calculation;

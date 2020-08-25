@@ -1,16 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
 
 //{listing, chooseDates, onSelect}
 const CheckOut = ({listing, chooseDates, onSelect, checkOutDate}) => (
-  <div className="calendar-input-checkout">
+  <CheckOutStyle>
     <input
       onClick={onSelect}
       type="text"
       id="check-out"
       placeholder={checkOutDate}
     />
-  </div>
-
+  </CheckOutStyle>
 );
+
+const CheckOutStyle = styled.div`
+  width: 100%;
+`;
 
 export default CheckOut;

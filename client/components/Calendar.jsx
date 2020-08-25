@@ -9,16 +9,35 @@ import styled from 'styled-components';
 
 const Calendar = ({listing, onCheckIn, onCheckOut, open, checkInDate, checkOutDate}) => (
   <CalendarBarStyle onClick={open}>
-    <CheckIn checkInDate={checkInDate} onSelect={onCheckIn}/>
-    <CheckOut checkOutDate={checkOutDate} onSelect={onCheckOut}/>
+    <CheckInStyle>
+      <CheckIn checkInDate={checkInDate} onSelect={onCheckIn}/>
+    </CheckInStyle>
+    <CheckOutStyle>
+      <CheckOut checkOutDate={checkOutDate} onSelect={onCheckOut}/>
+    </CheckOutStyle>
   </CalendarBarStyle>
 );
 
 const CalendarBarStyle = styled.div`
   display: flex;
+  justify-content: space-between;
   margin-right: auto;
   margin-left: auto;
-  width: 100;
+  width: 100%;
+  grid-template-columns: 50% 50%;
+`;
+
+const CheckInStyle = styled.div`
+  width: 100%;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  flex-grow: 3;
+`;
+const CheckOutStyle = styled.div`
+  width: 100%;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  flex-grow: 3;
 `;
 
 export default Calendar;

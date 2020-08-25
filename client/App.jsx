@@ -54,6 +54,7 @@ class App extends React.Component {
     this.subInfant = this.subInfant.bind(this);
     this.nightlyPriceCalc = this.nightlyPriceCalc.bind(this);
     this.total = this.total.bind(this);
+    this.modalClearDates = this.modalClearDates.bind(this);
   }
 
   componentDidMount() {
@@ -100,6 +101,7 @@ class App extends React.Component {
     this.setState({ checkIn: checkInMoment }, () => {
       console.log('checkin updated', this.state.checkIn)
       this.checkDays();
+
     })
   }
 
@@ -144,6 +146,12 @@ class App extends React.Component {
         checkOut: "CHECK-OUT"
       })
     }
+  }
+
+  modalClearDates() {
+    this.setState({numberOfNights: 0}, () => {
+      this.clearDates(3);
+    })
   }
 
   setDates() {
@@ -299,6 +307,10 @@ class App extends React.Component {
     })
   }
 
+  hoverDates() {
+
+  }
+
   render() {
     return (
       <AppStyle>
@@ -321,7 +333,7 @@ class App extends React.Component {
                             listing={this.state.listing}
                             checkInDate={this.state.checkIn}
                             checkOutDate={this.state.checkOut}
-                            clearDates={this.clearDates}
+                            clearDates={this.modalClearDates}
                             checkInSelected={this.state.selectedCheckIn}
                             checkOutSelected={this.state.selectedCheckOut}
                             selectCheckIn={this.selectCheckIn}
@@ -348,15 +360,16 @@ class App extends React.Component {
               />
             </ReactModal>
           </CalendarGuests>
+          <Reserve listing={this.state.listing}
+                   datesSelected={this.state.datesSelected}
+                   night={this.state.numberOfNights}
+          />
           <Calculation listing={this.state.listing}
                        datesSelected={this.state.datesSelected}
                        night={this.state.numberOfNights}
                        guests={this.state.guests}
                        nightlyPrice={this.state.nightlyPriceWGuests}
                        totalPrice={this.state.totalPrice}
-          />
-          <Reserve listing={this.state.listing}
-                   datesSelected={this.state.datesSelected}
           />
       </AppStyle>
     )
@@ -367,7 +380,7 @@ const AppStyle = styled.div`
   display: flex;
   flex-flow: column wrap;
   width: 375px;
-  height: 480px;
+  height: auto;
   padding: 24px;
   color: rgb(34, 34, 34);
   font-size: 16px;
@@ -387,10 +400,8 @@ const CalendarGuests = styled.div`
 
 const GuestStyles = {
   content: {
-    display: 'block',
     color: 'rgb(34, 34, 34)',
     justifyContent: 'flex-start',
-    position: 'absolute',
     height: '320px',
     width: '280px',
     backgroundColor: 'white',
@@ -401,28 +412,13 @@ const GuestStyles = {
 };
 
 const CalendarStyles = {
-  overlay: {
-    top: '0px',
-    left: '0px',
-    right: '0px',
-    bottom: '0px',
-    height: '100%',
-    width: '100%',
-  },
   content: {
     justifyContent: 'flex-start',
-    top: '40px',
-    left: '40px',
-    right: '40px',
-    bottom: '40px',
-    height: 'auto',
-    width: 'auto',
-    padding: '24px 24px 24px 24px',
-    transform: '(-50%, -50%)',
+    height: '320px',
+    width: '325px',
     backgroundColor: 'white',
     outlineColor: 'rgb(72, 72, 72)',
     borderRadius: '12px',
-    maxWidth: '1000px',
     flexFlow: 'row wrap'
   }
 };

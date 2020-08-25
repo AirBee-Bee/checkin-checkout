@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import styled from 'styled-components';
 
 import CheckIn from './CheckIn.jsx';
 import CheckOut from './CheckOut.jsx';
@@ -24,7 +25,7 @@ class CalendarModal extends React.Component {
     return this.state.moment.format("Y");
   }
 
-  currentDay() {
+  today() {
     return this.state.moment.format("D");
   }
 
@@ -53,6 +54,16 @@ class CalendarModal extends React.Component {
     console.log
   }
 
+  setHover(e) {
+    e.target.style.background = 'black';
+    e.target.style.color = 'white';
+  }
+
+  resetHover(e) {
+    e.target.style.removeProperty('background');
+    e.target.style.removeProperty('color');
+  }
+
   render() {
     let weekdayshortname = this.state.weekdayshort.map(day => {
       return <th key={day}>{day}</th>
@@ -65,9 +76,10 @@ class CalendarModal extends React.Component {
 
     let daysInMonth = [];
     for (let d = 1; d <= this.daysInMonth(); d++) {
-      let currentDay = d == this.currentDay() ? "today" : "";
+      let today = d == this.today() ? "today" : "";
+
       daysInMonth.push(
-        <td key={d} className={`calendar-day ${currentDay}`}>
+        <td key={d} className={`calendar-day ${today}`}>
           <span
             onClick={e => {
               if(this.props.checkInSelected) {
@@ -87,6 +99,8 @@ class CalendarModal extends React.Component {
                 //this.props.selectCheckIn();
               }
             }}
+            onMouseEnter={this.setHover}
+            onMouseLeave={this.resetHover}
           >
             {d}
           </span>
@@ -119,49 +133,80 @@ class CalendarModal extends React.Component {
 
     return (
       <React.Fragment>
-        <div className="modal-header">
-          <div className="select-dates">
-            Select dates
+        <CalendarStyle>
+          <div className="modal-header">
+            <div className="select-dates">
+              Select dates
+            </div>
+            <div className="minimum-nights">
+              Minimum Stay: {this.props.listing.minNights} nights
+            </div>
+            <CheckInOutStyle>
+              <CheckIn onSelect={this.props.selectCheckIn} checkInDate={this.props.checkInDate}/>
+              <CheckOut onSelect={this.props.selectCheckOut} checkOutDate={this.props.checkOutDate}/>
+            </CheckInOutStyle>
           </div>
-          <div className="minimum-nights">
-            Minimum Stay: {this.props.listing.minNights} nights
+          <div className="calendar">
+            <div className="calendar-navigation">
+              <ChangeMonthStyle>
+                <div onClick={e => {
+                      this.previousMonth();
+                    }}
+                    className="calendar-button button-prev">
+                -</div>
+                <div className="month-one">
+                  <div className="month">{this.month()}</div>
+                  <div className="year">{this.year()}</div>
+                  </div>
+                <div onClick={e => {
+                  this.nextMonth();
+                  }}
+                  className="calendar-button button-next">
+                +</div>
+              </ChangeMonthStyle>
+            </div>
+            <CalendarDatesStyle>
+              <table className="calendar-day">
+                <thead>
+                  <tr>{weekdayshortname}</tr>
+                </thead>
+                <tbody>{daysinmonth}</tbody>
+              </table>
+            </CalendarDatesStyle>
+            <ButtonStyle>
+              <button onClick={this.props.clearDates}>Clear Dates</button>
+              <button onClick={this.props.close}>Close</button>
+            </ButtonStyle>
           </div>
-            <CheckIn onSelect={this.props.selectCheckIn} checkInDate={this.props.checkInDate}/>
-            <CheckOut onSelect={this.props.selectCheckOut} checkOutDate={this.props.checkOutDate}/>
-        </div>
-        <div className="calendar">
-          <div className="calendar-navigation">
-            <div onClick={e => {
-                  this.previousMonth();
-                }}
-                className="calendar-button button-prev">
-            -</div>
-            <div onClick={e => {
-                this.nextMonth();
-              }}
-              className="calendar-button button-next">
-            +</div>
-          </div>
-          <div className="calendar-dates">
-              <div className="month-one">
-                <div className="month">{this.month()}</div>
-                <div className="year">{this.year()}</div>
-                <table className="calendar-day">
-                  <thead>
-                    <tr>{weekdayshortname}</tr>
-                  </thead>
-                  <tbody>{daysinmonth}</tbody>
-                </table>
-              </div>
-          </div>
-          <div>
-            <button onClick={this.props.clearDates}>Clear Dates</button>
-            <button onClick={this.props.close}>Close</button>
-          </div>
-        </div>
+        </CalendarStyle>
       </React.Fragment>
     )
   }
 }
+
+const CalendarStyle = styled.div`
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+`;
+
+const CalendarDatesStyle = styled.div`
+  display: flex;
+  justify-content: center
+`;
+
+const CheckInOutStyle = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  width: auto;
+`;
+
+const ChangeMonthStyle = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+`;
+
+const ButtonStyle = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 export default CalendarModal;
